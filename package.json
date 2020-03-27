@@ -1,25 +1,26 @@
 {
-  "name": "tui-jsdoc-template",
-  "version": "1.2.2",
-  "description": "Toast UI JSDoc Template",
+  "name": "flow-jsdoc-template",
+  "version": "1.2.3",
+  "description": "Flow JSDoc Template",
   "main": "publish.js",
   "scripts": {
     "serve": "gulp serve"
   },
   "authors": [
+    "Aspectron INC <info@aspectron.com>",
     "NHNEnt FE Development Lab <dl_javascript@nhnent.com>"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nhnent/tui.jsdoc-template"
+    "url": "https://github.com/aspectron/flow-jsdoc-template"
   },
   "keywords": [
     "jsdoc",
     "jsdoc3",
     "jsdoc-template",
     "template",
-    "tui"
+    "flow"
   ],
   "dependencies": {
     "cheerio": "^0.22.0"

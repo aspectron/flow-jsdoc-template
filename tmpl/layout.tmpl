@@ -4,7 +4,7 @@ var examples = env.conf.opts.tutorials;
 var css = templates.css;
 var logo = templates.logo;
 var footerText = templates.footerText;
-var logoUrl = 'img/toast-ui.png';
+var logoUrl = 'https://avatars1.githubusercontent.com/u/783327?s=200&v=4';
 var width, height;
 var name = templates.name || package.name || title;
 var tutorialsName = templates.tabNames.tutorials;
@@ -12,6 +12,7 @@ var apiName = templates.tabNames.api;
 var style = '';
 var version = '';
 var logoLink = '';
+var googleFonts = (typeof templates.googleFonts != 'undefined') ? templates.googleFonts : 'Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700'
 
 if (logo) {
     logoUrl = logo.url || logoUrl;
@@ -19,6 +20,8 @@ if (logo) {
     width = logo.width;
     height = logo.height;
 }
+width = width || '100px';
+height = height || '100px';
 
 if (width) {
     style += 'width: ' + width;
@@ -37,6 +40,8 @@ if (package) {
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
     <title><?js= title + ' | ' + name ?></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
@@ -47,7 +52,10 @@ if (package) {
     <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+    <link type="text/css" rel="stylesheet" href="styles/flow-doc.css">
+    <?js if(googleFonts){ ?>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=<?js= googleFonts ?>">
+    <?js } ?>
 
     <?js if (css) { ?>
         <?js css.forEach(function(style) { ?>
@@ -73,8 +81,10 @@ if (package) {
         <?js } ?>
     </div>
     <div class="search-container" id="search-container">
-        <input type="text" placeholder="Search">
-        <ul></ul>
+        <div class="search-container-inner">
+            <input type="text" placeholder="Search">
+            <ul></ul>
+        </div>
     </div>
     <?js if (examples) { ?>
         <ol class="lnb-tab">
@@ -86,6 +96,7 @@ if (package) {
             </li>
         </ol>
     <?js } ?>
+    <a class="btn btn-primary btn-sm show-hide-inherited-btn" data-action="hide">Hide inherited</a>
     <?js= this.nav ?>
 </nav>
 <div id="resizer"></div>
@@ -96,14 +107,15 @@ if (package) {
 
 <footer>
     <img class="logo" src="<?js= logoUrl?>" style="<?js= style ?>">
-    <div class="footer-text"><?js= footerText || 'NHN Entertainment. Frontend Development Lab' ?></div>
+    <div class="footer-text"><?js= footerText || 'Copyright (c) 2019-2020 ASPECTRON Inc. All Rights Reserved. &bull; <a href="https://flow.aspectron.com">https://flow.aspectron.com</a> &bull; <a href="https://github.com/aspectron/flow-ux">https://github.com/aspectron/flow-ux</a>' ?></div>
 </footer>
 <script>prettyPrint();</script>
 <script src="scripts/jquery.min.js"></script>
-<script src="scripts/tui-doc.js"></script>
+<script src="scripts/flow-doc.js"></script>
 <script src="scripts/linenumber.js"></script>
 <?js if (!isTutorial) { ?>
     <script>
+
         var id = '<?js= docs[0].longname ?>_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
@@ -111,6 +123,29 @@ if (package) {
         $selectedApi.removeClass('hidden');
         $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
         showLnbApi();
+        $(".show-hide-inherited-btn").on("click.x", function(e, el){
+            var $btn = $(this);
+            var action = $btn.attr("data-action");
+            $btn.attr("data-action", action == 'hide' ? 'show' :'hide');
+            $btn.html((action=='hide'?'Show':'Hide') + ' inherited')
+            $(".inherited-from").each((index, el)=>{
+                var $dd = $(el).closest("dd");
+                if(!$dd.length)
+                    return;
+                $dd[action]();
+                var $prev = $dd.prev();
+                if(!$prev.length || $prev[0].tagName.toLowerCase() != 'dt')
+                    return
+                $prev[action]();
+            })
+        })
+        if(window.IntersectionObserver){
+            var observer = new IntersectionObserver( 
+                ([e]) => e.target.toggleAttribute('stuck', e.intersectionRatio < 1),
+                {threshold: [1]}
+            );
+            observer.observe(document.querySelector('.search-container'));
+        }
     </script>
 <?js } else { ?>
     <script>

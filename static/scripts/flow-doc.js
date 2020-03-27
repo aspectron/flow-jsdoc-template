@@ -88,7 +88,7 @@ function onKeyupSearchInput(event) {
     }
 
     if (!inputText) {
-        $searchedList.html('');
+        $searchedList.html('').toggleClass("active", false);
         return;
     }
 
@@ -137,7 +137,7 @@ function moveToPage(url) {
 }
 
 function clear() {
-    $searchedList.html('');
+    $searchedList.html('').toggleClass("active", false);
     $searchInput.val('');
     $selected = $();
 }
@@ -150,7 +150,7 @@ function setList(inputText) {
     }).each(function(idx, item) {
         html += makeListItemHtml(item, inputText);
     });
-    $searchedList.html(html);
+    $searchedList.html(html).toggleClass("active", !!html);
 }
 
 function isMatched(itemText, inputText) {

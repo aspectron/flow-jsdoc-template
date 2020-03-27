@@ -420,6 +420,8 @@ function makeItemHtmlInNav(item, linkHtml) {
 }
 
 function makeCollapsibleItemHtmlInNav(item, linkHtml) {
+    //if(item.name== 'Router')
+    //    console.log("item", item)
     return '<li>'
         + linkHtml
         + '<button type="button" class="hidden toggle-subnav btn btn-link">'
@@ -451,7 +453,7 @@ function linktoExternal(longName, name) {
  * @param {array<object>} members.interfaces
  * @return {string} The HTML for the navigation sidebar.
  */
-function buildNav(members) {
+function __buildNav(members) {
     var nav = '';
     var seen = {};
     var seenTutorials = {};
@@ -492,6 +494,93 @@ function buildNav(members) {
             nav += '<div class="lnb-api hidden"><h3>Global</h3><ul>' + globalNav + '</ul></div>';
         }
     }
+
+    return nav;
+}
+
+function buildGroupNav (members, title) {
+    var globalNav;
+    var seenTutorials = {};
+    var nav = '';
+    var seen = {};
+    nav += '<div class="category">';
+    if (title) {
+        nav += '<h2>' + title + '</h2>';
+    }
+    nav += buildMemberNav(members.tutorials || [], 'Tutorials', seenTutorials, linktoTutorial);
+    nav += buildMemberNav(members.modules || [], 'Modules', {}, linkto);
+    nav += buildMemberNav(members.externals || [], 'Externals', seen, linktoExternal);
+    nav += buildMemberNav(members.namespaces || [], 'Namespaces', seen, linkto);
+    nav += buildMemberNav(members.classes || [], 'Classes', seen, linkto);
+    nav += buildMemberNav(members.interfaces || [], 'Interfaces', seen, linkto);
+    nav += buildMemberNav(members.events || [], 'Events', seen, linkto);
+    nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto);
+    nav += buildMemberNav(members.components || [], 'Components', seen, linkto);
+    
+    if (members.globals && members.globals.length) {
+        globalNav = '';
+
+        members.globals.forEach(function(g) {
+            if ( /*g.kind !== 'typedef' &&*/ !hasOwnProp.call(seen, g.longname) ) {
+                globalNav += '<li>' + linkto(g.longname, g.name) + '</li>';
+            }
+            seen[g.longname] = true;
+        });
+
+        if (!globalNav) {
+            // turn the heading into a link so you can actually get to the global page
+            nav += '<h3>' + linkto('global', 'Global') + '</h3>';
+        }
+        else {
+            nav += '<h3>Global</h3><div class="lnb-global"><ul>' + globalNav + '</ul></div>';
+        }
+    }
+    nav += '</div>';
+    return nav
+}
+
+/**
+ * Create the navigation sidebar.
+ * @param {object} members The members that will be used to create the sidebar.
+ * @param {array<object>} members.classes
+ * @param {array<object>} members.components
+ * @param {array<object>} members.externals
+ * @param {array<object>} members.globals
+ * @param {array<object>} members.mixins
+ * @param {array<object>} members.modules
+ * @param {array<object>} members.namespaces
+ * @param {array<object>} members.tutorials
+ * @param {array<object>} members.events
+ * @param {array<object>} members.interfaces
+ * @return {string} The HTML for the navigation sidebar.
+ */
+function buildNav(members) {
+    var nav = '<h2><a href="index.html">Home</a></h2>';
+
+    var categorised = {}
+    var rootScope = {}
+
+    var types = [
+        'tutorials', 'modules', 'externals', 'namespaces', 'classes',
+        'components', 'interfaces', 'events', 'mixins', 'globals'
+    ]
+    types.forEach(function(type) {
+        if (!members[type]) { return }
+        members[type].forEach(function(element) {
+            if (element.category) {
+                if (!categorised[element.category]){ categorised[element.category] = []; }
+                if (!categorised[element.category][type]){ categorised[element.category][type] = []; }
+                categorised[element.category][type].push(element);
+            } else {
+                rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element];
+            }
+        })
+    })
+    
+    nav += buildGroupNav(rootScope);
+    Object.keys(categorised).sort().forEach(function (category) {
+        nav += buildGroupNav(categorised[category], category);
+    });
 
     return nav;
 }
