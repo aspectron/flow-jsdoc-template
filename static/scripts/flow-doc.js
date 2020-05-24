@@ -187,7 +187,8 @@ function removeWhiteSpace(value) {
 /*************** TOOGLE SUB NAV ***************/
 function toggleSubNav(e) {
     $(e.currentTarget).next().toggleClass('hidden');
-    $(e.currentTarget).find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+    $(e.currentTarget).find('.fal').toggleClass('fa-caret-right fa-caret-down');
+//    $(e.currentTarget).find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
 }
 
 $lnb.find('.lnb-api').each(function() {
