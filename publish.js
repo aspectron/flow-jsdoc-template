@@ -13,6 +13,8 @@ var util = require('util');
 var cheerio = require('cheerio'); // for parse html to dom
 var _ = require('underscore');
 
+const _S = require('underscore.string');
+
 var htmlsafe = helper.htmlsafe;
 var linkto = helper.linkto;
 var resolveAuthorLinks = helper.resolveAuthorLinks;
@@ -22,6 +24,7 @@ var hasOwnProp = Object.prototype.hasOwnProperty;
 var data;
 var view;
 var tutorialsName;
+var flowUxPath = "../dist/latest/flow-ux-static/flow-ux/";
 
 var outdir = path.normalize(env.opts.destination);
 
@@ -236,7 +239,15 @@ function getPathFromDoclet(doclet) {
         doclet.meta.filename;
 }
 
-function generate(title, docs, filename, resolveLinks) {
+function writeDocFile({html, resolveLinks, outpath}){
+    if (resolveLinks) {
+        html = helper.resolveLinks(html); // turn {@link foo} into <a href="foodoc.html">foo</a>
+    }
+
+    fs.writeFileSync(outpath, html, 'utf8');
+}
+
+function generate(title, docs, filename, resolveLinks, fileType="") {
     var docData;
     var html;
     var outpath;
@@ -244,21 +255,51 @@ function generate(title, docs, filename, resolveLinks) {
     resolveLinks = resolveLinks === false ? false : true;
 
     docData = {
-        env: env,
+        env,
         isTutorial: false,
-        title: title,
-        docs: docs,
+        title,
+        docs,
+        isComponentPage:false,
+        flowUxPath,
         package: find({kind: 'package'})[0]
     };
 
-    outpath = path.join(outdir, filename);
-    html = view.render('container.tmpl', docData);
-
-    if (resolveLinks) {
-        html = helper.resolveLinks(html); // turn {@link foo} into <a href="foodoc.html">foo</a>
+    
+    let opt = {
+        title, filename, docs, resolveLinks
     }
 
-    fs.writeFileSync(outpath, html, 'utf8');
+    outpath = path.join(outdir, filename);
+    //html = `${JSON.stringify(opt, null, "\t")}`;
+    if(fileType=="index-page"){
+        html = view.render('container.tmpl', docData);
+        return writeDocFile({html, resolveLinks, outpath})
+    }
+    
+    let tag = _S(filename.replace(".html", "").replace(".js", "-js").replace(/[^\w]g/, '-')).trim();
+    let t_a_g = tag.underscored();
+    docData.TaG = t_a_g.classify().value();
+    docData.t_a_g = t_a_g.value();
+    docData.t_a_g_ = t_a_g.dasherize().value()
+    console.log("docData", docData)
+    html = view.partial('container.tmpl', docData);
+    docData.content = html;
+    html = view.partial(view.layoutComponent, docData);
+    //outpath = path.join(outdir, filename.replace(".js", "-js").replace(".html", ".js"));
+    //if(fileType=="source-code")
+    //    return writeDocFile({html, resolveLinks, outpath})
+
+    outpath = path.join(outdir, docData.t_a_g_+".js");
+    writeDocFile({html, resolveLinks, outpath});
+
+    docData.content = "";
+    docData.isComponentPage = true;
+    html = view.partial(view.layout, docData);
+    outpath = path.join(outdir, filename);
+    writeDocFile({html, resolveLinks, outpath})
+
+
+    
 }
 
 function generateSourceFiles(sourceFiles, encoding) {
@@ -280,7 +321,7 @@ function generateSourceFiles(sourceFiles, encoding) {
         }
 
         generate('Source: ' + sourceFiles[file].shortened, [source], sourceOutfile,
-            false);
+            false, 'source-code');
     });
 }
 
@@ -350,7 +391,7 @@ function buildSubNav(obj) {
         memberof: longname
     });
 
-    var html = '<div class="hidden" id="' + obj.longname.replace(/"/g, '_') + '_sub">';
+    var html = '<div class="sub-nav hidden" id="' + obj.longname.replace(/"/g, '_') + '_sub">';
     html += buildSubNavMembers(members, 'Members');
     html += buildSubNavMembers(methods, 'Methods');
     html += buildSubNavMembers(events, 'Events');
@@ -422,14 +463,13 @@ function makeItemHtmlInNav(item, linkHtml) {
 function makeCollapsibleItemHtmlInNav(item, linkHtml) {
     //if(item.name== 'Router')
     //    console.log("item", item)
-    return '<li>'
-    + '<button type="button" class="hidden toggle-subnav btn btn-link">'
-    //        + '  <span class="glyphicon glyphicon-plus"></span>'
-    + '  <i class="fal fa-caret-right"></i>'
-    + '</button>'
-    + linkHtml
-        + buildSubNav(item)
-        + '</li>';
+    return `<li>
+    <button type="button" class="hidden toggle-subnav btn btn-link">
+        <i class="fal fa-caret-right"></i>
+    </button>
+    ${linkHtml}
+    ${buildSubNav(item)}
+    </li>`;
 }
 
 function linktoTutorial(longName, name) {
@@ -642,6 +682,15 @@ exports.publish = function(taffyData, opts, tutorials) {
             path.basename(conf.default.layoutFile) ) :
         'layout.tmpl';
 
+    view.layoutComponent = conf.default.componentFile ?
+        path.getResourcePath(path.dirname(conf.default.componentFile),
+            path.basename(conf.default.componentFile) ) :
+        'component.tmpl';
+    view.layoutComponentPage = conf.default.componentPageFile ?
+        path.getResourcePath(path.dirname(conf.default.componentPageFile),
+            path.basename(conf.default.componentPageFile) ) :
+        'component-page.tmpl';
+
     // set up tutorials for helper
     helper.setTutorials(tutorials);
 
@@ -813,9 +862,10 @@ exports.publish = function(taffyData, opts, tutorials) {
 
     generate('Home',
         packages.concat(
-            [{kind: 'mainpage', readme: opts.readme, longname: (opts.mainpagetitle) ? opts.mainpagetitle : 'Main Page'}]
+            [{kind: 'mainpage', readme: opts.readme, 
+            longname: (opts.mainpagetitle) ? opts.mainpagetitle : 'Main Page'}]
         ),
-    indexUrl);
+    indexUrl, true, 'index-page');
 
     // set up the lists that we'll use to generate pages
     var classes = taffy(members.classes);
@@ -832,6 +882,7 @@ exports.publish = function(taffyData, opts, tutorials) {
         }
 
         var myClasses = helper.find(classes, {longname: longname});
+        //console.log("myClasses", myClasses)
         if (myClasses.length) {
             generate('Class: ' + myClasses[0].name, myClasses, helper.longnameToUrl[longname]);
         }

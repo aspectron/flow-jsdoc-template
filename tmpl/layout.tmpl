@@ -44,6 +44,8 @@ if (package) {
     <meta http-equiv="Content-Language" content="en">
     <title><?js= title + ' | ' + name ?></title>
 
+    <link rel="stylesheet" type="text/css" href="<?js= flowUxPath ?>flow-ux.css" />
+    <script type="module" src="<?js= flowUxPath ?>flow-ux.js"></script>
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -64,52 +66,66 @@ if (package) {
     <?js } ?>
 	<link rel="stylesheet" type="text/css" href="fonts/fontawesome/css/all.min.css" />
 </head>
-<body>
-<nav class="lnb" id="lnb">
-    <div class="logo" style="<?js= style ?>">
-        <?js if (logoLink) { ?>
-            <a href="<?js= logoLink?>" rel="noopener noreferrer" target="_blank">
+<body class="loading">
+<flow-app floating-drawer_ main-v-box>
+    <div slot="header"><?js= title + ' | ' + name ?></div>
+    <div slot="header" class="flex"></div>
+    <a slot="header" class="link active" href="index.html">Home</a>
+    <a slot="header" class="link" href="#">Support</a>
+    <div slot="drawer">
+        <nav class="lnb" id="lnb">
+        <div class="logo" style="<?js= style ?>">
+            <?js if (logoLink) { ?>
+                <a href="<?js= logoLink?>" rel="noopener noreferrer" target="_blank">
+                    <img src="<?js= logoUrl?>" width="100%" height="100%">
+                </a>
+            <?js } else { ?>
                 <img src="<?js= logoUrl?>" width="100%" height="100%">
-            </a>
-        <?js } else { ?>
-            <img src="<?js= logoUrl?>" width="100%" height="100%">
+            <?js } ?>
+        </div>
+        <div class="title">
+            <h1><a href="index.html" class="link"><?js= name ?></a></h1>
+            <?js if (version) { ?>
+                <span class="version">v<?js= version ?></span>
+            <?js } ?>
+        </div>
+        <div class="search-container" id="search-container">
+            <div class="search-container-inner">
+                <input type="text" placeholder="Search">
+                <ul></ul>
+            </div>
+        </div>
+        <?js if (examples) { ?>
+            <ol class="lnb-tab">
+                <li id="api-tab">
+                    <a href="#"><h4><?js= apiName ?></h4></a>
+                </li>
+                <li id="examples-tab">
+                    <a href="#"><h4><?js= tutorialsName ?></h4></a>
+                </li>
+            </ol>
         <?js } ?>
+        <a class="btn btn-primary btn-sm show-hide-inherited-btn" data-action="hide">Hide inherited</a>
+        <?js= this.nav ?>
+    </nav>
+    <!--div id="resizer"></div-->
     </div>
-    <div class="title">
-        <h1><a href="index.html" class="link"><?js= name ?></a></h1>
-        <?js if (version) { ?>
-            <span class="version">v<?js= version ?></span>
-        <?js } ?>
-    </div>
-    <div class="search-container" id="search-container">
-        <div class="search-container-inner">
-            <input type="text" placeholder="Search">
-            <ul></ul>
+    <div slot="main" class="main-content">
+        <div class="main" id="main">
+            <?js= content ?>
+            <?js if(isComponentPage){ ?>
+                <jsdoc-<?js= t_a_g_ ?> class="component"></jsdoc-<?js= t_a_g_ ?>>
+            <?js } ?>
         </div>
     </div>
-    <?js if (examples) { ?>
-        <ol class="lnb-tab">
-            <li id="api-tab">
-                <a href="#"><h4><?js= apiName ?></h4></a>
-            </li>
-            <li id="examples-tab">
-                <a href="#"><h4><?js= tutorialsName ?></h4></a>
-            </li>
-        </ol>
-    <?js } ?>
-    <a class="btn btn-primary btn-sm show-hide-inherited-btn" data-action="hide">Hide inherited</a>
-    <?js= this.nav ?>
-</nav>
-<div id="resizer"></div>
-
-<div class="main" id="main">
-    <?js= content ?>
-</div>
-
-<footer>
-    <img class="logo" src="<?js= logoUrl?>" style="<?js= style ?>">
-    <div class="footer-text"><?js= footerText || 'Copyright (c) 2019-2020 ASPECTRON Inc. All Rights Reserved. &bull; <a href="https://flow.aspectron.com">https://flow.aspectron.com</a> &bull; <a href="https://github.com/aspectron/flow-ux">https://github.com/aspectron/flow-ux</a>' ?></div>
-</footer>
+    <footer slot="main">
+        <img class="logo" src="<?js= logoUrl?>" style="<?js= style ?>">
+        <div class="footer-text"><?js= footerText || 'Copyright (c) 2019-2020 ASPECTRON Inc. All Rights Reserved. &bull; <a href="https://flow.aspectron.com">https://flow.aspectron.com</a> &bull; <a href="https://github.com/aspectron/flow-ux">https://github.com/aspectron/flow-ux</a>' ?></div>
+    </footer>
+</flow-app>
+<?js if(isComponentPage){ ?>
+<script type="module" src="<?js= t_a_g_ ?>.js"></script>
+<?js } ?>
 <script>prettyPrint();</script>
 <script src="scripts/jquery.min.js"></script>
 <script src="scripts/flow-doc.js"></script>
@@ -153,5 +169,9 @@ if (package) {
         showLnbExamples();
     </script>
 <?js } ?>
+<script type="module">
+    import {ScrollbarStyle} from '<?js= flowUxPath ?>flow-ux.js';
+    ScrollbarStyle.appendTo('head');
+</script>
 </body>
 </html>

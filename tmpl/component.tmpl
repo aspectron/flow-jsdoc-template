@@ -1,0 +1,21 @@
+import {BaseElement, html, css} from '<?js= flowUxPath ?>flow-ux.js';
+export class JSDOC<?js= TaG ?> extends BaseElement {
+	static get styles() {
+		return css`:host {display:block;}`;
+	}
+	createRenderRoot(){return this;}
+	render() {
+		return html`
+		<?js= content.replace(/`/g, '&lsquo;') ?>
+		`;
+	}
+	connectedCallback(){
+		super.connectedCallback();
+		setTimeout(()=>{
+			prettyPrint();
+		}, 100)
+		
+	}
+}
+
+JSDOC<?js= TaG ?>.define('jsdoc-<?js= t_a_g_ ?>');

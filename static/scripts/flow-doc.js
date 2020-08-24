@@ -20,11 +20,13 @@ function showLnbApi() {
 
 $apiTab.click(showLnbApi);
 $examplesTab.click(showLnbExamples);
-
-/*************** RESIZE ***************/
-var $resizer = $('#resizer');
 var $lnb = $('#lnb');
 var $main = $('#main');
+
+/*************** RESIZE **************/
+/*
+var $resizer = $('#resizer');
+
 
 function resize(event) {
     var clientX = event.clientX;
@@ -50,6 +52,7 @@ $resizer.on('mousedown', function() {
         mouseup: detachResize
     });
 });
+*/
 
 /*************** SEARCH - AUTOCOMPLETE ***************/
 var $searchContainer = $('#search-container');
@@ -186,15 +189,15 @@ function removeWhiteSpace(value) {
 
 /*************** TOOGLE SUB NAV ***************/
 function toggleSubNav(e) {
-    $(e.currentTarget).next().toggleClass('hidden');
+    $(e.currentTarget).parent().find(".sub-nav").toggleClass('hidden');
     $(e.currentTarget).find('.fal').toggleClass('fa-caret-right fa-caret-down');
-//    $(e.currentTarget).find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+    //$(e.currentTarget).find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
 }
 
 $lnb.find('.lnb-api').each(function() {
     $(this).find('.toggle-subnav')
         .filter(function() {
-            return $(this).next(':empty').length === 0;
+            return $(this).parent().find('.sub-nav:empty').length === 0;
         }).each(function() {
             $(this).removeClass('hidden').on('click', toggleSubNav);
         });

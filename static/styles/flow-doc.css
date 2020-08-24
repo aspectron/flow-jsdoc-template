@@ -20,17 +20,24 @@
 body {
     font-size: 12px;
     font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, Malgun gothic, '돋움', AppleSDGothicNeo;
+    --flow-app-main-display:flex;
+    --flow-app-main-overflow:hidden;
+    --flow-app-drawer-overflow:auto;
+    opacity:1;
+    transition:opacity 0.5s ease;
 }
+body.loading{opacity:0}
 ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
 
 /* Navigation - LNB */
 .lnb {
-    width: 290px;
+    /*width: 290px;
     position: absolute;
     bottom: 30px;
     top: 0;
     overflow: auto;
     left: 0;
+    */
     background-color: #161b1d;
     padding: 0 20px;
 }
@@ -145,6 +152,13 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
 }
 
 /* MAIN-CONTENT */
+.main-content{
+    flex:1;overflow:auto;
+}
+.main{
+    margin-bottom:50px;
+}
+/*
 .main {
     padding: 20px;
     left: 297px;
@@ -155,6 +169,7 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
     overflow: auto;
     margin-bottom: 35px;
 }
+*/
 .main article ol,
 .main article ul {
     margin-left: 15px;
@@ -300,12 +315,12 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
 
 /* FOOTER */
 footer {
-    padding-top: 3px;
-    line-height: 35px;
+    padding:3px;
+    /*line-height: 35px;
     height: 35px;
-    position: fixed;
+    position: fixed;*/
     width: 100%;
-    bottom: 0;
+    /*bottom: 0;*/
     background-color: #00beaa;
     color: #ebf8ff;
     text-align: center;
@@ -604,7 +619,7 @@ footer{
 .lnb .lnb-api a, .lnb .lnb-examples a,
 .lnb-global a{color:#333}
 .lnb .member-type{color:#838383; font-size: 16px; }
-.main section header h2{border-left:20px solid #003661;}
+.main section header h2{border-left:20px solid #003661;margin-left:10px;}
 .lnb .title .link{text-decoration:none; color: #333; }
 .main section article .container-returns span,
 .main section article .container-params table{

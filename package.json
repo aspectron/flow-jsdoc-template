@@ -23,7 +23,8 @@
     "flow"
   ],
   "dependencies": {
-    "cheerio": "^0.22.0"
+    "cheerio": "^0.22.0",
+    "underscore.string":"*"
   },
   "devDependencies": {
     "del": "^2.2.2",
