@@ -6,7 +6,7 @@ export class JSDOC<?js= TaG ?> extends BaseElement {
 	createRenderRoot(){return this;}
 	render() {
 		return html`
-		<?js= content.replace(/`/g, '&lsquo;') ?>
+		<?js= content.replace(/`/g, '&grave;') ?>
 		`;
 	}
 	connectedCallback(){
