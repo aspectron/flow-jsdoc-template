@@ -4,14 +4,14 @@ var examples = env.conf.opts.tutorials;
 var css = templates.css;
 var logo = templates.logo;
 var footerText = templates.footerText;
-var logoUrl = 'https://aspectron.com/images/projects/flow.png';
+var logoUrl = 'https://flow.aspectron.com/resources/images/logo.png';
 var width, height;
 var name = templates.name || package.name || title;
 var tutorialsName = templates.tabNames.tutorials;
 var apiName = templates.tabNames.api;
 var style = '';
 var version = '';
-var logoLink = '';
+var logoLink = '../';
 var googleFonts = (typeof templates.googleFonts != 'undefined') ? templates.googleFonts : 'Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700'
 
 if (logo) {
