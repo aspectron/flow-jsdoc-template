@@ -117,9 +117,12 @@ if (package) {
                 <jsdoc-<?js= t_a_g_ ?> class="component"></jsdoc-<?js= t_a_g_ ?>>
             <?js } ?>
         </div>
-        <style>.footer-text, .footer-text a { font-size: 10px; }</style>
+        <style>
+            .footer-text, .footer-text a { font-size: 10px; }
+            .footer-text { text-align: center; }
+        </style>
         <div>
-            <img class="logo" src="<?js= logoUrl?>" style="<?js= style ?>">
+            <!-- img class="logo" src="<?js= logoUrl?>" style="<?js= style ?>" -->
             <div class="footer-text"><?js= footerText || 'Copyright (c) 2019-2020 ASPECTRON Inc. All Rights Reserved. &bull; <a href="https://flow.aspectron.com">https://flow.aspectron.com</a> &bull; <a href="https://github.com/aspectron/flow-ux">https://github.com/aspectron/flow-ux</a>' ?></div>
         </div>
     </div>
