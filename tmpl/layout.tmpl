@@ -71,7 +71,7 @@ if (package) {
     <div slot="header"><?js= title + ' | ' + name ?></div>
     <div slot="header" class="flex"></div>
     <a slot="header" class="link active" href="index.html">Home</a>
-    <a slot="header" class="link" href="#">Support</a>
+    <!-- a slot="header" class="link" href="#">Support</a -->
     <div slot="drawer">
         <nav class="lnb" id="lnb">
         <div class="logo" style="<?js= style ?>">
@@ -119,6 +119,7 @@ if (package) {
         </div>
     </div>
     <footer slot="main">
+        <style>.footer-text { font-size: 10px; }</style>
         <img class="logo" src="<?js= logoUrl?>" style="<?js= style ?>">
         <div class="footer-text"><?js= footerText || 'Copyright (c) 2019-2020 ASPECTRON Inc. All Rights Reserved. &bull; <a href="https://flow.aspectron.com">https://flow.aspectron.com</a> &bull; <a href="https://github.com/aspectron/flow-ux">https://github.com/aspectron/flow-ux</a>' ?></div>
     </footer>
