@@ -24,7 +24,8 @@ var hasOwnProp = Object.prototype.hasOwnProperty;
 var data;
 var view;
 var tutorialsName;
-var flowUxPath = "../dist/latest/flow-ux-static/flow-ux/";
+//var flowUxPath = "../dist/latest/flow-ux-static/flow-ux/";
+var flowUxPath = "https://cdn.aspectron.com/latest/flow-ux-static/flow-ux/";
 
 var outdir = path.normalize(env.opts.destination);
 
