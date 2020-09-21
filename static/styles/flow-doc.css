@@ -18,7 +18,7 @@
 
 
 body {
-    font-size: 12px;
+    font-size: 13.33px;
     font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, Malgun gothic, '돋움', AppleSDGothicNeo;
     --flow-app-main-display:flex;
     --flow-app-main-overflow:hidden;
@@ -636,7 +636,7 @@ d{background-color:#efefef;padding:1px 4px; border-radius:4px;}
 
 
 code, code > *, .number {
-    font-size: 16px;
+    font-size: 13.33px;
     font-family: "Source Code Pro", SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
     
 }
@@ -669,7 +669,7 @@ th {
 
 .main section article table th {
     color: #333;
-    font-size: 16px;
+    font-size: 13.33px;
 }
 
 .main section article table,
@@ -686,6 +686,6 @@ th {
 }
 
 .toggle-subnav i {
-    font-size: 20px;
+    font-size: 18px;
     color: steelblue;
 }
