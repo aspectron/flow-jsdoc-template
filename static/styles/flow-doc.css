@@ -18,7 +18,7 @@
 
 
 body {
-    font-size: 13.33px;
+    font-size: 15px;
     font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, Malgun gothic, '돋움', AppleSDGothicNeo;
     --flow-app-main-display:flex;
     --flow-app-main-overflow:hidden;
@@ -553,7 +553,7 @@ span.arrow {
 *{
     font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
     /*font-family:Lato,proxima-nova,"Helvetica Neue", Arial, sans-serif;*/
-    font-size:13.33px;
+    font-size:15px;
 }
 .search-container{
     position: -webkit-sticky;
@@ -636,7 +636,7 @@ d{background-color:#efefef;padding:1px 4px; border-radius:4px;}
 
 
 code, code > *, .number {
-    font-size: 13.33px;
+    font-size: 15px;
     font-family: "Source Code Pro", SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
     
 }
@@ -669,7 +669,7 @@ th {
 
 .main section article table th {
     color: #333;
-    font-size: 13.33px;
+    font-size: 15px;
 }
 
 .main section article table,

@@ -1,6 +1,6 @@
 {
   "name": "flow-jsdoc-template",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "Flow JSDoc Template",
   "main": "publish.js",
   "scripts": {
